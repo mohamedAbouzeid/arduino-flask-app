@@ -5,7 +5,6 @@ from flask import Flask
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
-print(os.environ['DATABASE_URL'])
 db = SQLAlchemy(app)
 
 class Article(db.Model):
@@ -20,10 +19,10 @@ class Article(db.Model):
         self.picture_url = picture_url
 
     def __repr__(self):
-        return '<Name %r>' % self.name
+        return '<Title %r>' % self.title
 
 @app.route('/')
-def get_data():
+def add_data():
     article = Article('google.com', 'john.doe@example.com', 'google-image.com')
     db.session.add(article)
     db.session.commit()
