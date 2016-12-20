@@ -2,6 +2,7 @@ import requests
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask
 from bs4 import BeautifulSoup
+from app import Article
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -24,14 +25,18 @@ def parse():
         return
     text_warpper = detail_site_data.body.find('div', class_='river')
     if text_warpper:
+        articles = text_warpper.find_all('div')
+        for article in articles:
+            if article.find('div',class_='span6 first'):
+                continue
+            if not article.find('h2'):
+                continue
+            title = article.find('h2').getText()
+            url = article.find('h2').find('a').get('href')
+            picture_url = article.find('img').get('src')
 
-        # image_urls = [text_warpper.find('img')]
-        # paragraphs = text_warpper.find_all('p')
-        # text = ''
-        # for paragraph in paragraphs:
-        #     text += paragraph.getText()
-        # if image_urls:
-        #     return {'text': text, 'image_urls': image_urls}
-        # else:
-        #     return {'text': text, 'image_urls': []}
+            article = Article(url, title, picture_url)
+            db.session.add(article)
+            db.session.commit()
 
+parse()
