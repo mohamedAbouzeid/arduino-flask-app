@@ -1,10 +1,11 @@
-import requests
-import os
 import json
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask
+from flask import Response
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 app.config.from_object('config')
 db = SQLAlchemy(app)
 
@@ -35,7 +36,8 @@ def get_data():
     articles = []
     for article in all_articles:
         articles.append({'url': article.url, 'title': article.title, 'picture_url': article.picture_url})
-    return json.dumps(articles)
+    return Response(json.dumps(articles), content_type='application/json')
+
 
 
 
