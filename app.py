@@ -1,4 +1,5 @@
 import json
+import os
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask import Response
@@ -9,6 +10,7 @@ from sqlalchemy import desc
 app = Flask(__name__)
 CORS(app)
 app.config.from_object('config')
+app.config['DEBUG'] = os.environ.get('DEBUG', False)
 db = SQLAlchemy(app)
 
 class Article(db.Model):
@@ -35,7 +37,7 @@ def add_data():
 @app.route('/api/article/list')
 def get_data():
     all_articles = Article.query.all()
-    # all_articles = all_articles.order_by(desc('id'))
+    # all_articles.order_by(desc('id'))
     articles = []
     for article in all_articles:
         articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url})
