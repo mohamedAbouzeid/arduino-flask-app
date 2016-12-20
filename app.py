@@ -1,10 +1,11 @@
 import requests
 import os
+import json
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+app.config.from_object('config')
 db = SQLAlchemy(app)
 
 class Article(db.Model):
@@ -21,18 +22,20 @@ class Article(db.Model):
     # def __repr__(self):
     #     return '<Title %r>' % self.title
 
-@app.route('/app/list')
+@app.route('/')
 def add_data():
     article = Article('google.com', 'hamada', 'google-image.com')
     db.session.add(article)
     db.session.commit()
     return 'added'
 
-@app.route('/')
+@app.route('/api/article/list')
 def get_data():
-    all_users = Article.query.all()
-    print(all_users)
-    return all_users
+    all_articles = Article.query.all()
+    articles = []
+    for article in all_articles:
+        articles.append({'url': article.url, 'title': article.title, 'picture_url': article.picture_url})
+    return json.dumps(articles)
 
 
 
