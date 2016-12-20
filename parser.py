@@ -20,7 +20,7 @@ def get_raw_site(url, **kwargs):
     return BeautifulSoup(html.text, 'lxml')
 
 def parse():
-    detail_site_data = get_raw_site('http://www.businessinsider.de/')
+    detail_site_data = get_raw_site('http://www.businessinsider.de/?r=US&IR=T')
     if not detail_site_data:
         return
     text_warpper = detail_site_data.body.find('div', class_='river')
