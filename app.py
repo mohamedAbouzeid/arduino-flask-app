@@ -24,7 +24,7 @@ class Article(db.Model):
 
 @app.route('/')
 def add_data():
-    article = Article('google.com', 'hamada', 'google-image.com')
+    article = Article('google.com', 'This is a Dummy Title', 'http://www.presseportal.de/images/tt-de/3733-oeffentlichkeitsfahndungen.jpg')
     db.session.add(article)
     db.session.commit()
     return 'added'
