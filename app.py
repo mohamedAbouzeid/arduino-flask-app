@@ -15,9 +15,9 @@ db = SQLAlchemy(app)
 
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    url = db.Column(db.String(200))
-    title = db.Column(db.String(100))
-    picture_url = db.Column(db.String(200))
+    url = db.Column(db.String(300))
+    title = db.Column(db.String(300))
+    picture_url = db.Column(db.String(300))
 
     def __init__(self, url, title, picture_url):
         self.url = url
