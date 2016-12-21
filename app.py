@@ -7,7 +7,7 @@ from flask_cors import CORS
 from werkzeug.contrib.cache import MemcachedCache
 from config import MEMCACHEDCLOUD_SERVER
 
-cache = MemcachedCache(['127.0.0.1:11211'])
+cache = MemcachedCache([MEMCACHEDCLOUD_SERVER])
 
 app = Flask(__name__)
 CORS(app)
