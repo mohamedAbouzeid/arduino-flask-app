@@ -32,7 +32,7 @@ def delete_all_and_leave_latest_100():
 
 def add_latest_12_to_cache():
     all_articles = Article.query.order_by(desc(Article.id)).limit(12).all()
-    cache.set('latest_12_items', all_articles, timeout=5 * 60)
+    cache.set('latest_12_items', all_articles)
     all_articles = cache.get('latest_12_items')
     print(all_articles)
 
