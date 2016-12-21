@@ -8,7 +8,7 @@ from sqlalchemy import desc
 from werkzeug.contrib.cache import MemcachedCache
 from config import MEMCACHEDCLOUD_SERVER
 
-cache = MemcachedCache([MEMCACHEDCLOUD_SERVER])
+cache = MemcachedCache([MEMCACHEDCLOUD_SERVER, MEMCACHEDCLOUD_USERNAME, MEMCACHEDCLOUD_PASSWORD])
 
 app = Flask(__name__)
 app.config.from_object('config')

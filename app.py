@@ -5,9 +5,9 @@ from flask import Flask
 from flask import Response
 from flask_cors import CORS
 from werkzeug.contrib.cache import MemcachedCache
-from config import MEMCACHEDCLOUD_SERVER
+from config import MEMCACHEDCLOUD_SERVER, MEMCACHEDCLOUD_USERNAME, MEMCACHEDCLOUD_PASSWORD
 
-cache = MemcachedCache([MEMCACHEDCLOUD_SERVER])
+cache = MemcachedCache([MEMCACHEDCLOUD_SERVER, MEMCACHEDCLOUD_USERNAME, MEMCACHEDCLOUD_PASSWORD])
 
 app = Flask(__name__)
 CORS(app)
