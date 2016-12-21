@@ -29,18 +29,17 @@ class Article(db.Model):
 
 @app.route('/')
 def add_data():
-    article = Article('google.com', 'This is a Dummy Title', 'http://www.presseportal.de/images/tt-de/3733-oeffentlichkeitsfahndungen.jpg')
+    article = Article('http://www.google.com', 'This is a Dummy Title', 'http://www.presseportal.de/images/tt-de/3733-oeffentlichkeitsfahndungen.jpg')
     db.session.add(article)
     db.session.commit()
     return 'added'
 
 @app.route('/api/article/list')
 def get_data():
-    all_articles = Article.query.all()
-    # all_articles.order_by(desc('id'))
+    all_articles = Article.query.order_by(desc(Article.id)).limit(12).all()
     articles = []
     for article in all_articles:
-        articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url})
+        articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url, 'id': article.id})
     return Response(json.dumps(articles), content_type='application/json')
 
 
