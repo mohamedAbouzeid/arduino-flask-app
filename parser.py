@@ -12,10 +12,9 @@ db = SQLAlchemy(app)
 
 def get_raw_site(url, **kwargs):
     headers = kwargs.get('headers', {'User-Agent': 'Mozilla/5.0 (Windows NT 5.1; rv:10.0.1)'
-                                                   ' Gecko/20100101 Firefox/10.0.1', 'charset':'utf-8'})
+                                                   ' Gecko/20100101 Firefox/10.0.1', 'charset': 'utf-8'})
     query_params = kwargs.get('data', None)
     timeout = kwargs.get('timeout', 10)
-
 
     html = requests.get(url, headers=headers, data=query_params, timeout=timeout)
     html.encoding = 'utf=8'
@@ -39,9 +38,9 @@ def parse():
             picture_url = article.find('img').get('src')
 
             article = Article(url, title, picture_url)
-            test_article = Article.query.filter(Article.title==title).all()
+            test_article = Article.query.filter(Article.title == title).all()
             if len(test_article) >= 1:
-                return
+                continue
             db.session.add(article)
             db.session.commit()
 

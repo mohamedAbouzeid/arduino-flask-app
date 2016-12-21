@@ -13,6 +13,7 @@ app.config.from_object('config')
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
 db = SQLAlchemy(app)
 
+
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     url = db.Column(db.String(300))
@@ -27,12 +28,15 @@ class Article(db.Model):
     # def __repr__(self):
     #     return '<Title %r>' % self.title
 
-@app.route('/')
+
+@app.route('/addDummy')
 def add_data():
-    article = Article('http://www.google.com', 'This is a Dummy Title', 'http://www.presseportal.de/images/tt-de/3733-oeffentlichkeitsfahndungen.jpg')
+    article = Article('http://www.google.com', 'This is a Dummy Title', 'http://www.presseportal.de/images/tt-de/'
+                                                                        '3733-oeffentlichkeitsfahndungen.jpg')
     db.session.add(article)
     db.session.commit()
-    return 'added'
+    return 'added Dummy entry'
+
 
 @app.route('/api/article/list')
 def get_data():
@@ -41,8 +45,6 @@ def get_data():
     for article in all_articles:
         articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url, 'id': article.id})
     return Response(json.dumps(articles), content_type='application/json')
-
-
 
 
 if __name__ == '__main__':
