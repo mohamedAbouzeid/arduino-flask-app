@@ -8,9 +8,7 @@ from sqlalchemy import desc
 from werkzeug.contrib.cache import MemcachedCache
 from config import MEMCACHEDCLOUD_SERVER
 
-print(MEMCACHEDCLOUD_SERVER)
 cache = MemcachedCache([MEMCACHEDCLOUD_SERVER])
-print(MEMCACHEDCLOUD_SERVER)
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -36,6 +34,8 @@ def delete_all_and_leave_latest_100():
 def add_latest_12_to_cache():
     all_articles = Article.query.order_by(desc(Article.id)).limit(12).all()
     cache.set('latest_12_items', all_articles, timeout=5 * 60)
+    all_articles = cache.get('latest_12_items')
+    print(all_articles)
 
 
 def parse():
