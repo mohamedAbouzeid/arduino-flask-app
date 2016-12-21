@@ -1,13 +1,12 @@
-import json
-import os
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask import Response
 from flask_cors import CORS
-from werkzeug.contrib.cache import MemcachedCache
-from config import MEMCACHEDCLOUD_SERVER, MEMCACHEDCLOUD_USERNAME, MEMCACHEDCLOUD_PASSWORD
+import os
+import bmemcached
+import json
 
-cache = MemcachedCache([MEMCACHEDCLOUD_SERVER, MEMCACHEDCLOUD_USERNAME, MEMCACHEDCLOUD_PASSWORD])
+cache = bmemcached.Client(os.environ.get('MEMCACHEDCLOUD_SERVERS').split(','), os.environ.get('MEMCACHEDCLOUD_USERNAME'), os.environ.get('MEMCACHEDCLOUD_PASSWORD'))
 
 app = Flask(__name__)
 CORS(app)
