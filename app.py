@@ -44,11 +44,7 @@ def add_data():
 def get_data():
     all_articles = cache.get('latest_12_items')
     if all_articles is not None:
-        articles = []
-        for article in all_articles:
-            articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url,
-                             'id': article.id})
-        return Response(json.dumps(articles), content_type='application/json')
+        return Response(json.dumps(all_articles), content_type='application/json')
 
 
 if __name__ == '__main__':
