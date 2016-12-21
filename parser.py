@@ -1,9 +1,14 @@
-
+import os
 import requests
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask
 from bs4 import BeautifulSoup
 from app import Article
+from sqlalchemy import desc
+from werkzeug.contrib.cache import MemcachedCache
+from config import MEMCACHEDCLOUD_SERVER
+
+cache = MemcachedCache([MEMCACHEDCLOUD_SERVER])
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -20,11 +25,22 @@ def get_raw_site(url, **kwargs):
     html.encoding = 'utf=8'
     return BeautifulSoup(html.text, 'lxml')
 
+def delete_all_and_leave_latest_100():
+    articles_to_be_deleted = Article.query.order_by(desc(Article.id)).offset(100).all()
+    for article in articles_to_be_deleted:
+        db.session.delete(article)
+    db.session.commit()
+
+def add_latest_12_to_cache():
+    all_articles = Article.query.order_by(desc(Article.id)).limit(12).all()
+    cache.set('latest_12_items', all_articles, timeout=5 * 60)
+
 
 def parse():
     detail_site_data = get_raw_site('http://businessinsider.de/?IR=C')
     if not detail_site_data:
         return
+    delete_all_and_leave_latest_100()
     text_warpper = detail_site_data.body.find('div', class_='river')
     if text_warpper:
         articles = text_warpper.find_all('div')
@@ -43,5 +59,6 @@ def parse():
                 continue
             db.session.add(article)
             db.session.commit()
+    add_latest_12_to_cache()
 
 parse()

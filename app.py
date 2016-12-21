@@ -4,13 +4,16 @@ from flask.ext.sqlalchemy import SQLAlchemy
 from flask import Flask
 from flask import Response
 from flask_cors import CORS
-from sqlalchemy import desc
+from werkzeug.contrib.cache import MemcachedCache
+from config import MEMCACHEDCLOUD_SERVER
 
+cache = MemcachedCache([MEMCACHEDCLOUD_SERVER])
 
 app = Flask(__name__)
 CORS(app)
 app.config.from_object('config')
 app.config['DEBUG'] = os.environ.get('DEBUG', False)
+
 db = SQLAlchemy(app)
 
 
@@ -40,11 +43,13 @@ def add_data():
 
 @app.route('/api/article/list')
 def get_data():
-    all_articles = Article.query.order_by(desc(Article.id)).limit(12).all()
-    articles = []
-    for article in all_articles:
-        articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url, 'id': article.id})
-    return Response(json.dumps(articles), content_type='application/json')
+    all_articles = cache.get('latest_12_items')
+    if all_articles is not None:
+        articles = []
+        for article in all_articles:
+            articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url,
+                             'id': article.id})
+        return Response(json.dumps(articles), content_type='application/json')
 
 
 if __name__ == '__main__':
