@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from app import Article
 from sqlalchemy import desc
 from werkzeug.contrib.cache import MemcachedCache
-from config import MEMCACHEDCLOUD_SERVER
+from config import MEMCACHEDCLOUD_SERVER, MEMCACHEDCLOUD_USERNAME, MEMCACHEDCLOUD_PASSWORD
 
 cache = MemcachedCache([MEMCACHEDCLOUD_SERVER, MEMCACHEDCLOUD_USERNAME, MEMCACHEDCLOUD_PASSWORD])
 
