@@ -7,7 +7,8 @@ from sqlalchemy import desc
 import os
 import bmemcached
 
-cache = bmemcached.Client(os.environ.get('MEMCACHEDCLOUD_SERVERS').split(','), os.environ.get('MEMCACHEDCLOUD_USERNAME'), os.environ.get('MEMCACHEDCLOUD_PASSWORD'))
+cache = bmemcached.Client(os.environ.get('MEMCACHEDCLOUD_SERVERS').split(','), os.environ.get('MEMCACHEDCLOUD_USERNAME')
+                          , os.environ.get('MEMCACHEDCLOUD_PASSWORD'))
 
 app = Flask(__name__)
 app.config.from_object('config')
@@ -24,11 +25,13 @@ def get_raw_site(url, **kwargs):
     html.encoding = 'utf=8'
     return BeautifulSoup(html.text, 'lxml')
 
+
 def delete_all_and_leave_latest_100():
     articles_to_be_deleted = Article.query.order_by(desc(Article.id)).offset(100).all()
     for article in articles_to_be_deleted:
         db.session.delete(article)
     db.session.commit()
+
 
 def add_latest_12_to_cache():
     all_articles = Article.query.order_by(desc(Article.id)).limit(12).all()
