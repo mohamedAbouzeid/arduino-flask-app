@@ -37,8 +37,6 @@ def add_latest_12_to_cache():
         articles.append({'link': article.url, 'title': article.title, 'image': article.picture_url,
                          'id': article.id})
     cache.set('latest_12_items', articles)
-    all_articles = cache.get('latest_12_items')
-    print(all_articles)
 
 
 def parse():

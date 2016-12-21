@@ -45,6 +45,8 @@ def get_data():
     all_articles = cache.get('latest_12_items')
     if all_articles is not None:
         return Response(json.dumps(all_articles), content_type='application/json')
+    else:
+        return 'run parser.py please first'
 
 
 if __name__ == '__main__':
